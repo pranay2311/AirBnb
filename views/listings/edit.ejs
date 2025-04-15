@@ -3,7 +3,11 @@
   <div class="col-8 offset-2">
     <h2>Edit Listing</h2>
 
-    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT">
+    <form
+      method="POST"
+      action="/listings/<%= listing._id %>?_method=PUT"
+      class="needs-validation"
+    >
       <div class="mb-3">
         <label for="title" class="form-label">Enter Title</label>
         <input
@@ -11,13 +15,21 @@
           name="listing[title]"
           class="form-control"
           value="<%= listing.title %>"
+          required
         />
+        <div class="invalid-feedback">Enter Valid Title</div>
       </div>
       <div class="mb-3">
         <label for="description" class="form-label"> Enter Description</label>
-        <textarea name="listing[description]" id="" class="form-control">
+        <textarea
+          name="listing[description]"
+          id=""
+          class="form-control"
+          required
+        >
  <%= listing.description %> </textarea
         >
+        <div class="invalid-feedback">Enter Valid Description</div>
       </div>
 
       <div class="mb-3">
@@ -26,39 +38,49 @@
           type="text"
           name="listing[image]"
           class="form-control"
-          value="<%= listing.title %>"
+          value="<%= listing.image %>"
+          required
         />
+        <div class="invalid-feedback">Enter Valid Image URL</div>
       </div>
       <div class="mb-3 col-md-2">
         <label for="price" class="form-label">Enter Price</label>
         <input
-          type="text"
+        type="number"
           name="listing[price]"
           class="form-control"
           value="<%= listing.price %>"
+          required
+          pattern="\d+"
         />
+        <div class="invalid-feedback">Enter Valid Price</div>
       </div>
 
-      <div class="mb-3 col-md-8" >
+      <div class="mb-3 col-md-8">
         <label for="country" class="form-label">Enter Country</label>
         <input
+          required
           type="text"
           class="form-control"
           name="listing[country]"
           value="<%= listing.country %>"
         />
+        <div class="invalid-feedback">Enter Valid Country</div>
       </div>
       <div class="mb-3">
         <label for="location" class="form-label"></label>
         <input
+          required
           class="form-control"
           type="text"
           name="listing[location]"
           value="<%= listing.location %>"
         />
+        <div class="invalid-feedback">Enter Valid Location</div>
       </div>
       <button class="btn btn-dark add-btn mb-4">Edit</button>
-     
     </form>
   </div>
 </div>
+
+<script src="/js/script.js"></script>
