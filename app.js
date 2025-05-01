@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const Listing = require("./models/listings.js")
+const Listing = require("./models/listings.js");
+const Review = require("./models/Reviews.js");
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust"
 const path = require("path")
 const methodOverride = require("method-override")
@@ -33,9 +34,9 @@ app.get("/", (req, res) => {
 
 const validateListing = (req, res, next) => {
     let { error } = listingSchema.validate(req.body);
-    console.log(error.message,"Error");
+    console.log(error.message, "Error");
     if (error) {
-        let errMsg = error.details.map((el)=>el.message).join(",");
+        let errMsg = error.details.map((el) => el.message).join(",");
         throw new ExpressError(400, errMsg);
     }
     else {
@@ -89,6 +90,21 @@ app.delete("/listings/:id", wrapAsync(async (req, res) => {
     res.redirect("/listings")
 }));
 
+//Reviews
+//Post Route
+app.post("/listings/:id/reviews", async (req, res) => {
+    let listing = await Listing.findById(req.params.id);
+    let newReview = new Review(req.body.review);
+
+    listing.reviews.push(newReview);
+
+    await newReview.save();
+    await listing.save();
+    
+    console.log("New Review Saved");
+    res.send("New Review Saved");
+})
+
 //Show Route
 app.get("/listings/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
@@ -104,3 +120,5 @@ app.use((err, req, res, next) => {
     let { statusCode = 500, message = "Something went wrong" } = err;
     res.status(statusCode).render("listings/errors.ejs", { err });
 });
+
+
