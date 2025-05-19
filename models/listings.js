@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const reviews = require("./Reviews");
+const reviews = require("./review");
 const Schema = mongoose.Schema;
 
 const listingSchema = new Schema({
@@ -36,7 +36,7 @@ const listingSchema = new Schema({
     reviews: [
         {
             type: Schema.Types.ObjectId,
-            ref:"Reviews"
+            ref:"Review"
         }
     ]
 });
