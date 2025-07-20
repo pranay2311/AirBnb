@@ -13,8 +13,33 @@ const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const { listingSchema, reviewSchema } = require("./schema.js");
-const listings = require("./routes/listings.js")
-const reviews = require("./routes/reviews.js")
+const listings = require("./routes/listings.js");
+const reviews = require("./routes/reviews.js");
+const session = require("express-session");
+const flash = require("connect-flash");
+
+
+const sessionOptions = {
+    secret: "Secret",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days in milliseconds
+    },
+    httpOnly: true
+}
+
+
+
+app.use(session(sessionOptions));
+app.use(flash());
+
+app.use((req, res, next) => {
+    res.locals.success = req.flash("success");
+    next();
+});
+
 
 async function main() {
     await mongoose.connect(MONGO_URL);
@@ -45,8 +70,8 @@ app.get("/", wrapAsync(async (req, res) => {
 
 
 
-app.use("/listings",listings)
-app.use("/listings/:id/reviews",reviews)
+app.use("/listings", listings)
+app.use("/listings/:id/reviews", reviews)
 
 
 

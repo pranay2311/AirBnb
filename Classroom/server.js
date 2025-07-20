@@ -30,14 +30,23 @@ app.get("/test", (req, res) => {
 app.get("/register", (req, res) => {
     let { name = " " } = req.query;
     req.session.name = name;
-    console.log(name);
-    console.log(req.session.name);
-    req.flash("success", "User Registered")
+    if (name = " ") {
+
+
+        req.flash("error", "User not Registered");
+    }
+    else {
+        req.flash("success", "User Registered Successfully");
+    }
+
+    //   req.flash("success", "User Registered")
     res.redirect("/hello")
 })
 
 app.get("/hello", (req, res) => {
-    res.render("page.ejs", { name: req.session.name, msg: req.flash("success") });
+    res.locals.successMsg= req.flash("success");
+    res.locals.errorMsg= req.flash("error");
+    res.render("page.ejs", { name: req.session.name });
     console.log(req.session)
 
 })

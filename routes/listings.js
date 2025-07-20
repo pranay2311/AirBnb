@@ -42,7 +42,8 @@ router.post("/", validateListing, wrapAsync(async (req, res, next) => {
     let listing = req.body.listing;
     let newListing = new Listing(listing);
     await newListing.save();
-    res.redirect("/listings")
+    req.flash("success","New Listing Created!");
+    res.redirect("/listings");
 
 }));
 
