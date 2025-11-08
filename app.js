@@ -16,8 +16,9 @@ const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const { listingSchema, reviewSchema } = require("./schema.js");
-const listings = require("./routes/listings.js");
-const reviews = require("./routes/reviews.js");
+const listingsRouter = require("./routes/listings.js");
+const reviewsRouter = require("./routes/reviews.js");
+const userRouter = require("./routes/user.js");
 const session = require("express-session");
 const flash = require("connect-flash");
 
@@ -52,6 +53,14 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use("/demouser", async (req, res) => {
+    let fakeuser = new User({
+        email: "test@gmail.com",
+        username: "test"
+    })
+    let registereduser = await User.register(fakeuser, "chicken")
+    res.send(registereduser);
+})
 
 async function main() {
     await mongoose.connect(MONGO_URL);
@@ -78,8 +87,9 @@ app.get("/", wrapAsync(async (req, res) => {
 
 }));
 
-app.use("/listings", listings)
-app.use("/listings/:id/reviews", reviews)
+app.use("/listings", listingsRouter)
+app.use("/listings/:id/reviews", reviewsRouter)
+app.use("/", userRouter)
 
 
 app.all("*", (req, res, next) => {
