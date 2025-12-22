@@ -55,8 +55,8 @@ app.use((req, res, next) => {
 
 app.use("/demouser", async (req, res) => {
     let fakeuser = new User({
-        email: "test@gmail.com",
-        username: "test"
+        email: "test11@gmail.com",
+        username: "test11"
     })
     let registereduser = await User.register(fakeuser, "chicken")
     res.send(registereduser);
