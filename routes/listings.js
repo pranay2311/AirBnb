@@ -46,7 +46,7 @@ router.post("/", isLoggedIn, validateListing, wrapAsync(async (req, res, next) =
 
 
 //Edit Route
-router.get("/:id/edit",isLoggedIn, wrapAsync(async (req, res) => {
+router.get("/:id/edit", isLoggedIn, wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id);
     res.render("listings/edit.ejs", { listing });
@@ -70,8 +70,8 @@ router.delete("/:id", isLoggedIn, wrapAsync(async (req, res) => {
 //Show Route
 router.get("/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
-    const listing = await Listing.findById(id).populate("reviews");
-
+    const listing = await Listing.findById(id).populate("reviews").populate("owner");
+    console.log(listing);
     res.render("listings/show.ejs", { listing });
 }));
 
